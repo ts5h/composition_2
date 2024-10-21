@@ -135,35 +135,30 @@ export const useDrawLines = () => {
       cancelAnimationFrame(requestRef.current);
     }
 
-    const normalSpeedMax = isMobileOnly ? 0.9 : 1.9;
-    const highSpeedMax = isMobileOnly ? 7.4 : 9.9;
+    const slowSpeedMax = isMobileOnly ? 0.9 : 1.9;
+    const normalSpeedMax = slowSpeedMax * 3.0;
     const pointsMax = isMobileOnly ? 20 : 80;
 
     const numberOfPoints = Math.floor(Math.random() * pointsMax) + 40;
     const tmpPoints = [];
 
     for (let i = 0; i < numberOfPoints; i++) {
-      const radius =
-        Math.floor(Math.random() * 20) === 1
-          ? Math.random() * 100 + 1
-          : Math.random() * 20 + 1;
-      const isBass = Math.random();
+      const isBass = Math.random() > 0.92;
+      const radius = isBass ? Math.random() * 100 + 1 : Math.random() * 20 + 1;
 
       const point: Point = {
         radius,
         left: Math.random() * (winWidth - radius * 2) + radius,
         top: Math.random() * (winHeight - radius * 2) + radius,
         angle: Math.random() * 360,
-        speed:
-          isBass < 0.9
-            ? Math.random() * normalSpeedMax + 0.1
-            : Math.random() * highSpeedMax + 0.1,
+        speed: isBass
+          ? Math.random() * slowSpeedMax + 0.1
+          : Math.random() * normalSpeedMax + 0.1,
         collisionFlag: false,
-        isBass: isBass < 0.9,
-        midiNumber:
-          isBass < 0.9
-            ? Math.floor(Math.random() * 32) + 12
-            : Math.floor(Math.random() * 32) + 24,
+        isBass,
+        midiNumber: isBass
+          ? Math.floor(Math.random() * 32) + 12
+          : Math.floor(Math.random() * 32) + 24,
       };
 
       tmpPoints.push(point);
