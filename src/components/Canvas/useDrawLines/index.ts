@@ -4,6 +4,7 @@ import { usePlaySound } from "../usePlaySound";
 import { useWindowSize } from "../../../hooks/useWindowSize";
 
 type Point = {
+  radius: number;
   left: number;
   top: number;
   angle: number;
@@ -23,7 +24,6 @@ export const useDrawLines = () => {
   const { playSound } = usePlaySound();
 
   const lineWidth = 0.4;
-  const pointRadius = 1.2;
 
   const update = useCallback(() => {
     if (!points) return;
@@ -35,29 +35,31 @@ export const useDrawLines = () => {
 
       let collisionFlag = false;
       let newAngle = point.angle;
-      if (newLeft < 0 || newLeft > winWidth) {
+
+      if (newLeft < point.radius || newLeft > winWidth - point.radius) {
         newAngle = 180 - point.angle;
         collisionFlag = true;
 
-        if (newLeft < 0) {
-          newLeft = 0;
-        } else if (newLeft > winWidth) {
-          newLeft = winWidth;
+        if (newLeft < point.radius) {
+          newLeft = point.radius;
+        } else if (newLeft > winWidth - point.radius) {
+          newLeft = winWidth - point.radius;
         }
       }
 
-      if (newTop < 0 || newTop > winHeight) {
+      if (newTop < point.radius || newTop > winHeight - point.radius) {
         newAngle = 360 - point.angle;
         collisionFlag = true;
 
-        if (newTop < 0) {
-          newTop = 0;
-        } else if (newTop > winHeight) {
-          newTop = winHeight;
+        if (newTop < point.radius) {
+          newTop = point.radius;
+        } else if (newTop > winHeight - point.radius) {
+          newTop = winHeight - point.radius;
         }
       }
 
       return {
+        radius: point.radius,
         left: newLeft,
         top: newTop,
         angle: newAngle,
@@ -88,14 +90,14 @@ export const useDrawLines = () => {
           playSound(fromPoint.midiNumber, fromPoint.speed, fromPoint.isBass);
         }
 
-        context.fillStyle = "rgba(68, 68, 68, 0.75)";
+        context.fillStyle = "rgba(68, 68, 68, 0.5)";
         context.strokeStyle = "transparent";
 
         context.beginPath();
         context.arc(
           fromPoint.left,
           fromPoint.top,
-          pointRadius,
+          fromPoint.radius,
           0,
           (360 * Math.PI) / 180,
         );
@@ -141,10 +143,16 @@ export const useDrawLines = () => {
     const tmpPoints = [];
 
     for (let i = 0; i < numberOfPoints; i++) {
+      const radius =
+        Math.floor(Math.random() * 20) === 1
+          ? Math.random() * 100 + 1
+          : Math.random() * 20 + 1;
       const isBass = Math.random();
+
       const point: Point = {
-        left: Math.random() * (winWidth - pointRadius * 2) + pointRadius,
-        top: Math.random() * (winHeight - pointRadius * 2) + pointRadius,
+        radius,
+        left: Math.random() * (winWidth - radius * 2) + radius,
+        top: Math.random() * (winHeight - radius * 2) + radius,
         angle: Math.random() * 360,
         speed:
           isBass < 0.9
