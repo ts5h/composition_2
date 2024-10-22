@@ -16,7 +16,7 @@ export const usePlaySound = () => {
 
       const chord = isBass
         ? [midiNumber]
-        : [midiNumber, midiNumber + 3, midiNumber + 6, midiNumber + 10];
+        : [midiNumber, midiNumber + 3, midiNumber + 7, midiNumber + 10];
       const duration = isBass ? (10 - speed) * 0.5 : (10 - speed) * 0.25;
 
       const compressor = audioContext.createDynamicsCompressor();
