@@ -28,10 +28,10 @@ export const useDrawLines = () => {
   const update = useCallback(() => {
     if (!points) return;
 
-    const tmpPoints: Point[] = [];
+    const tmpPoints: Point[] = points;
 
     for (let i = 0; i < points.length; i++) {
-      const pointA = points[i];
+      const pointA = tmpPoints[i];
       const radian = pointA.angle * (Math.PI / 180);
       let newLeft = pointA.left + Math.cos(radian) * pointA.speed;
       let newTop = pointA.top + Math.sin(radian) * pointA.speed;
@@ -63,7 +63,7 @@ export const useDrawLines = () => {
 
       for (let j = 0; j < points.length; j++) {
         if (i !== j) {
-          const pointB = points[j];
+          const pointB = tmpPoints[j];
 
           const xLength = pointB.left - newLeft;
           const yLength = pointB.top - newTop;
@@ -74,6 +74,7 @@ export const useDrawLines = () => {
             pointB.angle = Math.atan2(yLength, xLength) * (180 / Math.PI);
 
             collisionFlag = true;
+            pointB.collisionFlag = true;
             break;
           }
         }
@@ -157,7 +158,7 @@ export const useDrawLines = () => {
     }
 
     const slowSpeedMax = isMobileOnly ? 0.9 : 1.9;
-    const normalSpeedMax = slowSpeedMax * 3.0;
+    const normalSpeedMax = slowSpeedMax * 2.5;
     const pointsMax = isMobileOnly ? 20 : 40;
 
     const numberOfPoints = Math.floor(Math.random() * pointsMax) + 40;
