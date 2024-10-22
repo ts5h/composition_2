@@ -30,7 +30,7 @@ export const usePlaySound = () => {
         // NOTE: Cut super bass
         if (oscillator.frequency.value < 65) return;
 
-        const offset = 0.1;
+        const offset = 0.05;
 
         oscillator
           .connect(gain)
