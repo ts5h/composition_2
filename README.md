@@ -1,4 +1,4 @@
-# Lines 2 - 2024
+# Composition 2 - 2024
 A generative motion graphic with React.  
 https://0bjekt.co/2023/composition/
 
