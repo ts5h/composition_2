@@ -42,7 +42,7 @@ export const usePlaySound = () => {
           audioContext.currentTime,
         );
         gain.gain.exponentialRampToValueAtTime(
-          0.0001,
+          0.00002,
           audioContext.currentTime + duration,
         );
 
