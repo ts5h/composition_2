@@ -16,37 +16,40 @@ export const usePlaySound = () => {
 
       const chord = isBass
         ? [midiNumber]
-        : [midiNumber, midiNumber + 3, midiNumber + 7, midiNumber + 10];
+        : [midiNumber, midiNumber + 3, midiNumber + 6, midiNumber + 10];
       const duration = isBass ? (10 - speed) * 0.5 : (10 - speed) * 0.25;
 
-      const compressor = new DynamicsCompressorNode(audioContext, {
-        threshold: -10,
-        knee: 36,
-        ratio: 16,
-        attack: 0.01,
-        release: 1.0,
-      });
+      const compressor = audioContext.createDynamicsCompressor();
 
       chord.forEach((tone) => {
-        const oscillator = new OscillatorNode(audioContext);
-        const gain = new GainNode(audioContext);
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
 
         oscillator.type = "sine";
         oscillator.frequency.value = getFrequency(tone);
         // NOTE: Cut super bass
-        if (oscillator.frequency.value <= 55) return;
+        if (oscillator.frequency.value < 65) return;
+
+        const offset = 0.05;
 
         oscillator
           .connect(gain)
           .connect(compressor)
           .connect(audioContext.destination);
         oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + duration);
+        oscillator.stop(audioContext.currentTime + duration + offset);
 
-        gain.gain.setValueAtTime(oscillator.frequency.value / 1000, audioContext.currentTime);
+        gain.gain.setValueAtTime(
+          0,
+          audioContext.currentTime,
+        );
+        gain.gain.linearRampToValueAtTime(
+          oscillator.frequency.value / 2000,
+          audioContext.currentTime + offset,
+        );
         gain.gain.exponentialRampToValueAtTime(
           0.00001,
-          audioContext.currentTime + duration,
+          audioContext.currentTime + duration + offset,
         );
 
         oscillator.onended = () => {

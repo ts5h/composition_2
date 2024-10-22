@@ -4,6 +4,7 @@ import { usePlaySound } from "../usePlaySound";
 import { useWindowSize } from "../../../hooks/useWindowSize";
 
 type Point = {
+  radius: number;
   left: number;
   top: number;
   angle: number;
@@ -23,50 +24,73 @@ export const useDrawLines = () => {
   const { playSound } = usePlaySound();
 
   const lineWidth = 0.4;
-  const pointRadius = 1.2;
 
   const update = useCallback(() => {
     if (!points) return;
 
-    const tmpPoints = points.map((point) => {
-      const radian = point.angle * (Math.PI / 180);
-      let newLeft = point.left + Math.cos(radian) * point.speed;
-      let newTop = point.top + Math.sin(radian) * point.speed;
+    const tmpPoints: Point[] = points;
+
+    for (let i = 0; i < points.length; i++) {
+      const pointA = tmpPoints[i];
+      const radian = pointA.angle * (Math.PI / 180);
+      let newLeft = pointA.left + Math.cos(radian) * pointA.speed;
+      let newTop = pointA.top + Math.sin(radian) * pointA.speed;
 
       let collisionFlag = false;
-      let newAngle = point.angle;
-      if (newLeft < 0 || newLeft > winWidth) {
-        newAngle = 180 - point.angle;
+      let newAngle = pointA.angle;
+
+      if (newLeft < pointA.radius || newLeft > winWidth - pointA.radius) {
+        newAngle = 180 - pointA.angle;
         collisionFlag = true;
 
-        if (newLeft < 0) {
-          newLeft = 0;
-        } else if (newLeft > winWidth) {
-          newLeft = winWidth;
+        if (newLeft < pointA.radius) {
+          newLeft = pointA.radius;
+        } else if (newLeft > winWidth - pointA.radius) {
+          newLeft = winWidth - pointA.radius;
         }
       }
 
-      if (newTop < 0 || newTop > winHeight) {
-        newAngle = 360 - point.angle;
+      if (newTop < pointA.radius || newTop > winHeight - pointA.radius) {
+        newAngle = 360 - pointA.angle;
         collisionFlag = true;
 
-        if (newTop < 0) {
-          newTop = 0;
-        } else if (newTop > winHeight) {
-          newTop = winHeight;
+        if (newTop < pointA.radius) {
+          newTop = pointA.radius;
+        } else if (newTop > winHeight - pointA.radius) {
+          newTop = winHeight - pointA.radius;
         }
       }
 
-      return {
+      for (let j = 0; j < points.length; j++) {
+        if (i !== j) {
+          const pointB = tmpPoints[j];
+
+          const xLength = pointB.left - newLeft;
+          const yLength = pointB.top - newTop;
+          const length = Math.sqrt(xLength ** 2 + yLength ** 2);
+
+          if (length < pointA.radius + pointB.radius) {
+            newAngle = Math.atan2(-yLength, -xLength) * (180 / Math.PI);
+            pointB.angle = Math.atan2(yLength, xLength) * (180 / Math.PI);
+
+            collisionFlag = true;
+            pointB.collisionFlag = true;
+            break;
+          }
+        }
+      }
+
+      tmpPoints[i] = {
+        radius: pointA.radius,
         left: newLeft,
         top: newTop,
         angle: newAngle,
-        speed: point.speed,
+        speed: pointA.speed,
         collisionFlag,
-        midiNumber: point.midiNumber,
-        isBass: point.isBass,
-      } as Point;
-    });
+        midiNumber: pointA.midiNumber,
+        isBass: pointA.isBass,
+      };
+    }
 
     setPoints(tmpPoints);
 
@@ -88,14 +112,14 @@ export const useDrawLines = () => {
           playSound(fromPoint.midiNumber, fromPoint.speed, fromPoint.isBass);
         }
 
-        context.fillStyle = "rgba(68, 68, 68, 0.75)";
+        context.fillStyle = "rgba(68, 68, 68, 0.5)";
         context.strokeStyle = "transparent";
 
         context.beginPath();
         context.arc(
           fromPoint.left,
           fromPoint.top,
-          pointRadius,
+          fromPoint.radius,
           0,
           (360 * Math.PI) / 180,
         );
@@ -133,29 +157,31 @@ export const useDrawLines = () => {
       cancelAnimationFrame(requestRef.current);
     }
 
-    const normalSpeedMax = isMobileOnly ? 0.9 : 1.9;
-    const highSpeedMax = isMobileOnly ? 7.4 : 9.9;
-    const pointsMax = isMobileOnly ? 20 : 80;
+    const slowSpeedMax = isMobileOnly ? 0.9 : 1.9;
+    const normalSpeedMax = slowSpeedMax * 2.5;
+    const pointsMax = isMobileOnly ? 20 : 40;
 
     const numberOfPoints = Math.floor(Math.random() * pointsMax) + 40;
     const tmpPoints = [];
 
     for (let i = 0; i < numberOfPoints; i++) {
-      const isBass = Math.random();
+      const isBass = Math.random() > 0.92;
+      const radius = isBass ? Math.random() * 100 + 1 : Math.random() * 20 + 1;
+
       const point: Point = {
-        left: Math.random() * (winWidth - pointRadius * 2) + pointRadius,
-        top: Math.random() * (winHeight - pointRadius * 2) + pointRadius,
+        radius,
+        left: Math.random() * (winWidth - radius * 2) + radius,
+        top: Math.random() * (winHeight - radius * 2) + radius,
         angle: Math.random() * 360,
         speed:
-          isBass < 0.9
-            ? Math.random() * normalSpeedMax + 0.1
-            : Math.random() * highSpeedMax + 0.1,
+          Math.random() > 0.9
+            ? Math.random() * slowSpeedMax + 0.1
+            : Math.random() * normalSpeedMax + 0.1,
         collisionFlag: false,
-        isBass: isBass < 0.9,
-        midiNumber:
-          isBass < 0.9
-            ? Math.floor(Math.random() * 32) + 12
-            : Math.floor(Math.random() * 32) + 24,
+        isBass,
+        midiNumber: isBass
+          ? Math.floor(Math.random() * 32) + 12
+          : Math.floor(Math.random() * 32) + 24,
       };
 
       tmpPoints.push(point);
