@@ -28,7 +28,7 @@ export const usePlaySound = () => {
         oscillator.type = "sine";
         oscillator.frequency.value = getFrequency(tone);
         // NOTE: Cut super bass
-        if (oscillator.frequency.value <= 55) return;
+        if (oscillator.frequency.value < 65) return;
 
         oscillator
           .connect(gain)
@@ -42,7 +42,7 @@ export const usePlaySound = () => {
           audioContext.currentTime,
         );
         gain.gain.exponentialRampToValueAtTime(
-          0.00002,
+          0.000001,
           audioContext.currentTime + duration,
         );
 
