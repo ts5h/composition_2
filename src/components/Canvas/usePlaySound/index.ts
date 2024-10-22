@@ -19,17 +19,11 @@ export const usePlaySound = () => {
         : [midiNumber, midiNumber + 3, midiNumber + 7, midiNumber + 10];
       const duration = isBass ? (10 - speed) * 0.5 : (10 - speed) * 0.25;
 
-      const compressor = new DynamicsCompressorNode(audioContext, {
-        threshold: -10,
-        knee: 36,
-        ratio: 16,
-        attack: 0.01,
-        release: 1.0,
-      });
+      const compressor = audioContext.createDynamicsCompressor();
 
       chord.forEach((tone) => {
-        const oscillator = new OscillatorNode(audioContext);
-        const gain = new GainNode(audioContext);
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
 
         oscillator.type = "sine";
         oscillator.frequency.value = getFrequency(tone);
@@ -48,7 +42,7 @@ export const usePlaySound = () => {
           audioContext.currentTime,
         );
         gain.gain.exponentialRampToValueAtTime(
-          0.00001,
+          0.0001,
           audioContext.currentTime + duration,
         );
 
