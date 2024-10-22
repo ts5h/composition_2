@@ -23,7 +23,7 @@ export const useDrawLines = () => {
   const { winWidth, winHeight } = useWindowSize();
   const { playSound } = usePlaySound();
 
-  const lineWidth = 0.4;
+  const lineWidth = 0.45;
 
   const update = useCallback(() => {
     if (!points) return;
@@ -112,7 +112,7 @@ export const useDrawLines = () => {
           playSound(fromPoint.midiNumber, fromPoint.speed, fromPoint.isBass);
         }
 
-        context.fillStyle = "rgba(68, 68, 68, 0.5)";
+        context.fillStyle = "rgba(68, 68, 68, 0.45)";
         context.strokeStyle = "transparent";
 
         context.beginPath();
