@@ -151,7 +151,7 @@ export const useDrawLines = () => {
         left: Math.random() * (winWidth - radius * 2) + radius,
         top: Math.random() * (winHeight - radius * 2) + radius,
         angle: Math.random() * 360,
-        speed: isBass
+        speed: Math.random() > 0.9
           ? Math.random() * slowSpeedMax + 0.1
           : Math.random() * normalSpeedMax + 0.1,
         collisionFlag: false,
