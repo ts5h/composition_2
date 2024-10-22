@@ -28,47 +28,68 @@ export const useDrawLines = () => {
   const update = useCallback(() => {
     if (!points) return;
 
-    const tmpPoints = points.map((point) => {
-      const radian = point.angle * (Math.PI / 180);
-      let newLeft = point.left + Math.cos(radian) * point.speed;
-      let newTop = point.top + Math.sin(radian) * point.speed;
+    const tmpPoints: Point[] = [];
+
+    for (let i = 0; i < points.length; i++) {
+      const pointA = points[i];
+      const radian = pointA.angle * (Math.PI / 180);
+      let newLeft = pointA.left + Math.cos(radian) * pointA.speed;
+      let newTop = pointA.top + Math.sin(radian) * pointA.speed;
 
       let collisionFlag = false;
-      let newAngle = point.angle;
+      let newAngle = pointA.angle;
 
-      if (newLeft < point.radius || newLeft > winWidth - point.radius) {
-        newAngle = 180 - point.angle;
+      if (newLeft < pointA.radius || newLeft > winWidth - pointA.radius) {
+        newAngle = 180 - pointA.angle;
         collisionFlag = true;
 
-        if (newLeft < point.radius) {
-          newLeft = point.radius;
-        } else if (newLeft > winWidth - point.radius) {
-          newLeft = winWidth - point.radius;
+        if (newLeft < pointA.radius) {
+          newLeft = pointA.radius;
+        } else if (newLeft > winWidth - pointA.radius) {
+          newLeft = winWidth - pointA.radius;
         }
       }
 
-      if (newTop < point.radius || newTop > winHeight - point.radius) {
-        newAngle = 360 - point.angle;
+      if (newTop < pointA.radius || newTop > winHeight - pointA.radius) {
+        newAngle = 360 - pointA.angle;
         collisionFlag = true;
 
-        if (newTop < point.radius) {
-          newTop = point.radius;
-        } else if (newTop > winHeight - point.radius) {
-          newTop = winHeight - point.radius;
+        if (newTop < pointA.radius) {
+          newTop = pointA.radius;
+        } else if (newTop > winHeight - pointA.radius) {
+          newTop = winHeight - pointA.radius;
         }
       }
 
-      return {
-        radius: point.radius,
+      for (let j = 0; j < points.length; j++) {
+        if (i !== j) {
+          const pointB = points[j];
+
+          const xLength = pointB.left - newLeft;
+          const yLength = pointB.top - newTop;
+          const length = Math.sqrt(xLength ** 2 + yLength ** 2);
+
+          if (length < pointA.radius + pointB.radius) {
+            newAngle = Math.atan2(-yLength, -xLength) * (180 / Math.PI);
+            pointB.angle = Math.atan2(yLength, xLength) * (180 / Math.PI);
+
+            collisionFlag = true;
+            break;
+          }
+        }
+      }
+
+      tmpPoints[i] = {
+        radius: pointA.radius,
         left: newLeft,
         top: newTop,
         angle: newAngle,
-        speed: point.speed,
+        speed: pointA.speed,
         collisionFlag,
-        midiNumber: point.midiNumber,
-        isBass: point.isBass,
-      } as Point;
-    });
+        midiNumber: pointA.midiNumber,
+        isBass: pointA.isBass,
+      };
+    }
 
     setPoints(tmpPoints);
 
@@ -137,7 +158,7 @@ export const useDrawLines = () => {
 
     const slowSpeedMax = isMobileOnly ? 0.9 : 1.9;
     const normalSpeedMax = slowSpeedMax * 3.0;
-    const pointsMax = isMobileOnly ? 20 : 80;
+    const pointsMax = isMobileOnly ? 20 : 40;
 
     const numberOfPoints = Math.floor(Math.random() * pointsMax) + 40;
     const tmpPoints = [];
