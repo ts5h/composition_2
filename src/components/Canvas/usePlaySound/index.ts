@@ -41,7 +41,7 @@ export const usePlaySound = () => {
 
         gain.gain.setValueAtTime(0, audioContext.currentTime);
         gain.gain.linearRampToValueAtTime(
-          oscillator.frequency.value / 2500,
+          oscillator.frequency.value / 2000,
           audioContext.currentTime + offset,
         );
         gain.gain.exponentialRampToValueAtTime(
