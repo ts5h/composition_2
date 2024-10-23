@@ -1,13 +1,14 @@
 # Composition 2 - 2024
 A generative motion graphic with React.  
-https://0bjekt.co/2023/composition/
+It is a developed version based on the [lines](https://github.com/ts5h/lines).  
+https://0bjekt.co/2024/composition_2/
 
-![lines_2](https://user-images.githubusercontent.com/1344010/224540219-0ffb673d-6bd8-4b90-a8c8-d69410493d6d.jpg)
+![composition_2](https://github.com/user-attachments/assets/b1834abf-267c-45e5-9237-31bf4f2760d3)
 
 ## Basic Usage
 ### Install & Run
 ```shell
-$ git clone origin git@github.com:ts5h/lines.git
+$ git clone origin git@github.com:ts5h/composition.git
 $ pnpm i
 $ pnpm start
 ```
