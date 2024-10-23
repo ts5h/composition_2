@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { useDrawLines } from "./useDrawLines";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import Styles from "../../scss/Canvas.module.scss";
 import { Menu } from "../Menu";
 import { MenuHome } from "../Menu/Home";
-import Styles from "../../scss/Canvas.module.scss";
+import { useDrawLines } from "./useDrawLines";
 
 export const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);

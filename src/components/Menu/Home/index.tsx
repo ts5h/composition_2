@@ -1,6 +1,6 @@
 import React from "react";
-import { MenuButtonHome } from "../Button/Home";
 import Styles from "../../../scss/MenuHome.module.scss";
+import { MenuButtonHome } from "../Button/Home";
 
 export const MenuHome = () => {
   return (

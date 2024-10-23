@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
-import { usePlaySound } from "../usePlaySound";
 import { useWindowSize } from "../../../hooks/useWindowSize";
+import { usePlaySound } from "../usePlaySound";
 
 type Point = {
   radius: number;

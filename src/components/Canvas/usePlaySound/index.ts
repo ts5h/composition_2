@@ -1,5 +1,5 @@
-import { useCallback } from "react";
 import { useAtom } from "jotai";
+import { useCallback } from "react";
 import { audioContextAtom, soundFlagAtom } from "../../../store/Atoms";
 
 export const usePlaySound = () => {
@@ -39,10 +39,7 @@ export const usePlaySound = () => {
         oscillator.start(audioContext.currentTime);
         oscillator.stop(audioContext.currentTime + duration + offset);
 
-        gain.gain.setValueAtTime(
-          0,
-          audioContext.currentTime,
-        );
+        gain.gain.setValueAtTime(0, audioContext.currentTime);
         gain.gain.linearRampToValueAtTime(
           oscillator.frequency.value / 2500,
           audioContext.currentTime + offset,

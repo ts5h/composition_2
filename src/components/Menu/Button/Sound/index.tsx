@@ -1,9 +1,9 @@
-import React, { useState } from "react";
 import { useAtom } from "jotai";
+import React, { useState } from "react";
 import { isIOS, isMobile } from "react-device-detect";
-import { audioContextAtom, soundFlagAtom } from "../../../../store/Atoms";
 import { SoundOff, SoundOn } from "../../../../icons";
 import Styles from "../../../../scss/Menu.module.scss";
+import { audioContextAtom, soundFlagAtom } from "../../../../store/Atoms";
 
 export const MenuButtonSound = () => {
   const [audioContext] = useAtom<AudioContext>(audioContextAtom);

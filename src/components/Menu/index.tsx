@@ -1,8 +1,8 @@
 import React from "react";
-import { MenuButtonSound } from "./Button/Sound";
-import { MenuButtonReload } from "./Button/Reload";
-import { MenuButtonGitHub } from "./Button/GitHub";
 import Styles from "../../scss/Menu.module.scss";
+import { MenuButtonGitHub } from "./Button/GitHub";
+import { MenuButtonReload } from "./Button/Reload";
+import { MenuButtonSound } from "./Button/Sound";
 
 export const Menu = () => {
   return (
