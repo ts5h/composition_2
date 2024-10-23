@@ -1,16 +1,14 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { useWindowSize } from "../../hooks/useWindowSize";
 import Styles from "../../scss/Canvas.module.scss";
 import { Menu } from "../Menu";
 import { MenuHome } from "../Menu/Home";
-import { useDrawLines } from "./useDrawLines";
+import { useDrawShapes } from "./useDrawShapes";
 
 export const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const timerId = useRef<number | null>(null);
 
-  const { winWidth, winHeight } = useWindowSize();
-  const { drawLines, initializeContext, reset } = useDrawLines();
+  const { drawShapes, initializeContext, reset } = useDrawShapes();
 
   const handleResize = useCallback(() => {
     if (timerId.current) {
@@ -25,16 +23,14 @@ export const Canvas = () => {
     if (!context) return;
 
     // NOTE: Do not include winWidth and winHeight in dependencies because the values are not updated properly on resize
-    context.canvas.width = winWidth;
-    context.canvas.height = winHeight;
+    context.canvas.width = 5000;
+    context.canvas.height = 4000;
     reset();
 
     timerId.current = window.setTimeout(() => {
-      drawLines();
+      drawShapes();
     }, 500);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [drawLines, reset]);
+  }, [drawShapes, reset]);
 
   // Initialize
   useEffect(() => {

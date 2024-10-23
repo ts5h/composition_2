@@ -14,7 +14,7 @@ type Point = {
   midiNumber: number;
 };
 
-export const useDrawLines = () => {
+export const useDrawShapes = () => {
   const [context, setContext] = useState<CanvasRenderingContext2D>();
   const [points, setPoints] = useState<Point[]>();
 
@@ -23,7 +23,7 @@ export const useDrawLines = () => {
   const { winWidth, winHeight } = useWindowSize();
   const { playSound } = usePlaySound();
 
-  const lineWidth = 0.45;
+  const lineWidth = 0.4;
 
   const update = useCallback(() => {
     if (!points) return;
@@ -97,7 +97,7 @@ export const useDrawLines = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [points]);
 
-  const drawLines = useCallback(() => {
+  const drawShapes = useCallback(() => {
     if (!context) return;
 
     context.clearRect(0, 0, winWidth, winHeight);
@@ -112,7 +112,7 @@ export const useDrawLines = () => {
           playSound(fromPoint.midiNumber, fromPoint.speed, fromPoint.isBass);
         }
 
-        context.fillStyle = "rgba(68, 68, 68, 0.45)";
+        context.fillStyle = "rgba(68, 68, 68, 0.37)";
         context.strokeStyle = "transparent";
 
         context.beginPath();
@@ -147,7 +147,7 @@ export const useDrawLines = () => {
     }
 
     update();
-    requestRef.current = requestAnimationFrame(drawLines);
+    requestRef.current = requestAnimationFrame(drawShapes);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context, playSound, points, update]);
@@ -160,13 +160,16 @@ export const useDrawLines = () => {
     const slowSpeedMax = isMobileOnly ? 0.9 : 1.9;
     const normalSpeedMax = slowSpeedMax * 2.5;
     const pointsMax = isMobileOnly ? 20 : 40;
+    const radiusMax = isMobileOnly ? 70 : 100;
 
     const numberOfPoints = Math.floor(Math.random() * pointsMax) + 40;
     const tmpPoints = [];
 
     for (let i = 0; i < numberOfPoints; i++) {
       const isBass = Math.random() > 0.92;
-      const radius = isBass ? Math.random() * 100 + 1 : Math.random() * 20 + 1;
+      const radius = isBass
+        ? Math.random() * radiusMax + 1
+        : Math.random() * 20 + 1;
 
       const point: Point = {
         radius,
@@ -201,17 +204,17 @@ export const useDrawLines = () => {
 
   // initialize
   useEffect(() => {
-    requestRef.current = requestAnimationFrame(drawLines);
+    requestRef.current = requestAnimationFrame(drawShapes);
 
     return () => {
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current);
       }
     };
-  }, [drawLines]);
+  }, [drawShapes]);
 
   return {
-    drawLines,
+    drawShapes,
     initializeContext,
     reset,
   };
