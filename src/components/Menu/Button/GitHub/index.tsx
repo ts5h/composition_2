@@ -17,7 +17,7 @@ export const MenuButtonGitHub = () => {
   };
 
   const handleClick = () => {
-    window.open("https://github.com/ts5h/lines");
+    window.open("https://github.com/ts5h/composition_2");
   };
 
   return (
