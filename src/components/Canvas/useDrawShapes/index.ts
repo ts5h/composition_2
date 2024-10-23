@@ -14,7 +14,7 @@ type Point = {
   midiNumber: number;
 };
 
-export const useDrawLines = () => {
+export const useDrawShapes = () => {
   const [context, setContext] = useState<CanvasRenderingContext2D>();
   const [points, setPoints] = useState<Point[]>();
 
@@ -97,7 +97,7 @@ export const useDrawLines = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [points]);
 
-  const drawLines = useCallback(() => {
+  const drawShapes = useCallback(() => {
     if (!context) return;
 
     context.clearRect(0, 0, winWidth, winHeight);
@@ -147,7 +147,7 @@ export const useDrawLines = () => {
     }
 
     update();
-    requestRef.current = requestAnimationFrame(drawLines);
+    requestRef.current = requestAnimationFrame(drawShapes);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context, playSound, points, update]);
@@ -167,7 +167,9 @@ export const useDrawLines = () => {
 
     for (let i = 0; i < numberOfPoints; i++) {
       const isBass = Math.random() > 0.92;
-      const radius = isBass ? Math.random() * radiusMax + 1 : Math.random() * 20 + 1;
+      const radius = isBass
+        ? Math.random() * radiusMax + 1
+        : Math.random() * 20 + 1;
 
       const point: Point = {
         radius,
@@ -202,17 +204,17 @@ export const useDrawLines = () => {
 
   // initialize
   useEffect(() => {
-    requestRef.current = requestAnimationFrame(drawLines);
+    requestRef.current = requestAnimationFrame(drawShapes);
 
     return () => {
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current);
       }
     };
-  }, [drawLines]);
+  }, [drawShapes]);
 
   return {
-    drawLines,
+    drawShapes,
     initializeContext,
     reset,
   };
