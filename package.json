@@ -12,6 +12,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "jotai": "^2.10.1",
+    "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.3.1",
@@ -25,9 +26,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "biome check ./src",
+    "lint": "biome lint ./src",
     "lint:fix": "biome check --write ./src",
-    "format": "biome format --write ./src"
+    "format": "biome format --write ./src && prettier --write \"./src/**/*.scss\""
   },
   "eslintConfig": {
     "extends": [
