@@ -22,7 +22,7 @@ export const MenuButtonHome = () => {
 
   return (
     <button
-      type={"button"}
+      type="button"
       className={`${Styles.menu} ${isHover ? Styles.on : ""}`}
       onMouseOver={() => handleHover(true)}
       onMouseOut={() => handleHover(false)}

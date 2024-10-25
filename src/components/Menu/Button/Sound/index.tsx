@@ -39,7 +39,7 @@ export const MenuButtonSound = () => {
 
   return (
     <button
-      type={"button"}
+      type="button"
       onMouseOver={() => handleHover(true)}
       onMouseOut={() => handleHover(false)}
       onFocus={() => handleHover(true)}
@@ -48,7 +48,7 @@ export const MenuButtonSound = () => {
       onTouchEnd={() => handleTouch(false)}
       onClick={handleClick}
       className={isHover ? Styles.on : ""}
-      title={"Sound"}
+      title="Sound"
     >
       <span className={Styles.icon}>
         {isSound ? <SoundOn /> : <SoundOff />}

@@ -22,7 +22,7 @@ export const MenuButtonGitHub = () => {
 
   return (
     <button
-      type={"button"}
+      type="button"
       onMouseOver={() => handleHover(true)}
       onMouseOut={() => handleHover(false)}
       onFocus={() => handleHover(true)}
@@ -31,7 +31,7 @@ export const MenuButtonGitHub = () => {
       onTouchEnd={() => handleTouch(false)}
       onClick={handleClick}
       className={isHover ? Styles.on : ""}
-      title={"GitHub"}
+      title="GitHub"
     >
       <AiFillGithub className={Styles.icon} />
     </button>

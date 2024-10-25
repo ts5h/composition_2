@@ -23,6 +23,12 @@
         "noUnusedVariables": "error",
         "useArrayLiterals": "off"
       },
+      "nursery": {
+        "useConsistentCurlyBraces": {
+          "level": "info",
+          "fix": "safe"
+        }
+      },
       "style": {
         "noNamespace": "error",
         "useAsConstAssertion": "error",
