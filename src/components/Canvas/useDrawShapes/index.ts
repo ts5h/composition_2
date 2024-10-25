@@ -159,10 +159,11 @@ export const useDrawShapes = () => {
 
     const slowSpeedMax = isMobileOnly ? 0.9 : 1.9;
     const normalSpeedMax = slowSpeedMax * 2.5;
-    const pointsMax = isMobileOnly ? 20 : 40;
-    const radiusMax = isMobileOnly ? 70 : 100;
+    const pointsMax = isMobileOnly ? 10 : 40;
+    const radiusMax = isMobileOnly ? 50 : 100;
+    const range = isMobileOnly ? 20 : 40;
 
-    const numberOfPoints = Math.floor(Math.random() * pointsMax) + 40;
+    const numberOfPoints = Math.floor(Math.random() * pointsMax) + range;
     const tmpPoints = [];
 
     for (let i = 0; i < numberOfPoints; i++) {

@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useRef } from "react";
+import { isMobileOnly } from "react-device-detect";
+
 import Styles from "../../scss/Canvas.module.scss";
 import { Menu } from "../Menu";
 import { MenuHome } from "../Menu/Home";
@@ -23,8 +25,8 @@ export const Canvas = () => {
     if (!context) return;
 
     // NOTE: Do not include winWidth and winHeight in dependencies because the values are not updated properly on resize
-    context.canvas.width = 5000;
-    context.canvas.height = 4000;
+    context.canvas.width = isMobileOnly ? 4000 : 6000;
+    context.canvas.height = isMobileOnly ? 3000 : 5000;
     reset();
 
     timerId.current = window.setTimeout(() => {
