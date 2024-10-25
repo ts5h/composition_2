@@ -26,7 +26,7 @@ export const MenuButtonReload = () => {
 
   return (
     <button
-      type={"button"}
+      type="button"
       onMouseOver={() => handleHover(true)}
       onMouseOut={() => handleHover(false)}
       onFocus={() => handleHover(true)}
@@ -35,7 +35,7 @@ export const MenuButtonReload = () => {
       onTouchEnd={() => handleTouch(false)}
       onClick={handleClick}
       className={isHover ? Styles.on : ""}
-      title={"Reload"}
+      title="Reload"
     >
       <span className={Styles.icon}>
         <Reload />
